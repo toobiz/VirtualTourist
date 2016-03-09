@@ -99,8 +99,8 @@
 		27681BBB1C8F20090093D929 /* Virtual Tourist */ = {
 			isa = PBXGroup;
 			children = (
+				27681BED1C8F2BE30093D929 /* Model */,
 				27681BBC1C8F20090093D929 /* AppDelegate.swift */,
-				27681BBE1C8F20090093D929 /* ViewController.swift */,
 				27681BC01C8F20090093D929 /* Main.storyboard */,
 				27681BC61C8F20090093D929 /* Assets.xcassets */,
 				27681BC81C8F20090093D929 /* LaunchScreen.storyboard */,
@@ -126,6 +126,14 @@
 				27681BE11C8F20090093D929 /* Info.plist */,
 			);
 			path = "Virtual TouristUITests";
+			sourceTree = "<group>";
+		};
+		27681BED1C8F2BE30093D929 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				27681BBE1C8F20090093D929 /* ViewController.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -405,7 +413,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Virtual Tourist/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "pl.weblify.virtualtourist.Virtual-Tourist";
+				PRODUCT_BUNDLE_IDENTIFIER = pl.weblify.virtualtourist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -416,7 +424,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Virtual Tourist/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "pl.weblify.virtualtourist.Virtual-Tourist";
+				PRODUCT_BUNDLE_IDENTIFIER = pl.weblify.virtualtourist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

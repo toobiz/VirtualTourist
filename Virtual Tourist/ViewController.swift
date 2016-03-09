@@ -25,21 +25,6 @@ class ViewController: UIViewController, MKMapViewDelegate {
         mapView.delegate = self
         plainView()
         
-//        let longitudeDelta = NSUserDefaults.standardUserDefaults().doubleForKey(savedLongitudeSpan)
-//        let latitudeDelta = NSUserDefaults.standardUserDefaults().doubleForKey(savedLatitudeSpan)
-//        let longitude = NSUserDefaults.standardUserDefaults().doubleForKey(savedLongitude)
-//        let latitude = NSUserDefaults.standardUserDefaults().doubleForKey(savedLatitude)
-//        
-//        let span = MKCoordinateSpanMake(latitudeDelta, longitudeDelta)
-//        let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-//        let region = MKCoordinateRegionMake(location, span)
-//        
-//        mapView.setRegion(region, animated: false)
-        
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        
         let longitudeDelta = NSUserDefaults.standardUserDefaults().doubleForKey(savedLongitudeSpan)
         let latitudeDelta = NSUserDefaults.standardUserDefaults().doubleForKey(savedLatitudeSpan)
         let longitude = NSUserDefaults.standardUserDefaults().doubleForKey(savedLongitude)
@@ -50,6 +35,13 @@ class ViewController: UIViewController, MKMapViewDelegate {
         let region = MKCoordinateRegionMake(location, span)
         
         mapView.setRegion(region, animated: false)
+        
+        // LongTap definierem
+        let longTap = UILongPressGestureRecognizer(target: self, action: "addPin:")
+        longTap.minimumPressDuration = 1.0
+        longTap.numberOfTouchesRequired = 1
+        longTap.allowableMovement = 100
+        mapView.addGestureRecognizer(longTap)
     }
     
     func mapView(mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
@@ -60,6 +52,16 @@ class ViewController: UIViewController, MKMapViewDelegate {
         NSUserDefaults.standardUserDefaults().setDouble(mapView.region.span.latitudeDelta, forKey: savedLatitudeSpan)
         NSUserDefaults.standardUserDefaults().setDouble(mapView.region.center.longitude, forKey: savedLongitude)
         NSUserDefaults.standardUserDefaults().setDouble(mapView.region.center.latitude, forKey: savedLatitude)
+    }
+    
+    func addPin(gestureRecognizer:UIGestureRecognizer) {
+        let pin = gestureRecognizer.locationInView(mapView)
+        let pinLocation : CLLocationCoordinate2D = mapView.convertPoint(pin, toCoordinateFromView: mapView)
+//        pin.coordinate = CLLocationCoordinate2DMake(<#T##latitude: CLLocationDegrees##CLLocationDegrees#>, <#T##longitude: CLLocationDegrees##CLLocationDegrees#>)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = pinLocation
+//        annotation.animatesDrop = true
+        self.mapView.addAnnotation(annotation)
     }
 
     // MARK: UI Configuration
@@ -75,6 +77,8 @@ class ViewController: UIViewController, MKMapViewDelegate {
         let editButton = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: "editView")
         self.navigationItem.rightBarButtonItem = editButton
     }
+    
+    
 
     
     override func didReceiveMemoryWarning() {

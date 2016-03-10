@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import CoreData
 
 class ViewController: UIViewController, MKMapViewDelegate {
 
@@ -52,20 +53,25 @@ class ViewController: UIViewController, MKMapViewDelegate {
     
     func initGestureRecognizer() {
         let longTap = UILongPressGestureRecognizer(target: self, action: "addPin:")
-        longTap.minimumPressDuration = 1.0
-        longTap.numberOfTouchesRequired = 1
+        longTap.minimumPressDuration = 0.5
         mapView.addGestureRecognizer(longTap)
     }
     
     func addPin(gestureRecognizer:UIGestureRecognizer) {
-        gestureRecognizer.enabled = false
-        let pin = gestureRecognizer.locationInView(mapView)
-        let pinLocation : CLLocationCoordinate2D = mapView.convertPoint(pin, toCoordinateFromView: mapView)
+        let tapPoint = gestureRecognizer.locationInView(mapView)
+        let tapLocation : CLLocationCoordinate2D = mapView.convertPoint(tapPoint, toCoordinateFromView: mapView)
+        if UIGestureRecognizerState.Began == gestureRecognizer.state {
         let annotation = MKPointAnnotation()
-        annotation.coordinate = pinLocation
-        self.mapView.addAnnotation(annotation)
+        annotation.coordinate = tapLocation
+            
+            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            let pin = Pin(annotationLatitude: tapLocation.latitude, annotationLongitude: tapLocation.longitude, context: appDelegate.managedObjectContext)
+            
+            mapView.addAnnotation(pin)
+            appDelegate.saveContext()
+
         print("adding annotation")
-        gestureRecognizer.enabled = true
+        }
     }
     
     func mapView(mapView: MKMapView, didAddAnnotationViews views: [MKAnnotationView]) {

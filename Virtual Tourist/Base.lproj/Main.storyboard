@@ -23,46 +23,70 @@
                             </mapView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N7W-XD-vYl">
                                 <rect key="frame" x="0.0" y="556" width="600" height="44"/>
-                                <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="u5f-aL-hFj"/>
-                                    <barButtonItem style="plain" id="eJL-2r-pOS">
-                                        <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Tap Pins to Delete" textAlignment="center" minimumFontSize="17" id="oz6-Gv-dFq">
-                                            <rect key="frame" x="235" y="7" width="129" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="textColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits"/>
-                                        </textField>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="tLe-0N-BPE"/>
-                                </items>
+                                <items/>
                                 <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="barTintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </toolbar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap Pins to Delete" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cxj-gK-0SO">
+                                <rect key="frame" x="227" y="567" width="147" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="09f-Nb-Ve6"/>
+                                    <constraint firstAttribute="width" constant="147" id="8MI-ay-OpY"/>
+                                    <constraint firstAttribute="width" constant="147" id="Qgc-Dr-EEx"/>
+                                    <constraint firstAttribute="width" constant="147" id="TrN-eg-pl2"/>
+                                    <constraint firstAttribute="width" constant="147" id="cds-Km-ovy"/>
+                                    <constraint firstAttribute="height" constant="21" id="eP6-mO-CZ8"/>
+                                    <constraint firstAttribute="height" constant="21" id="ekT-kX-bAa"/>
+                                    <constraint firstAttribute="height" constant="21" id="rrg-Zb-862"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="8MI-ay-OpY"/>
+                                        <exclude reference="Qgc-Dr-EEx"/>
+                                        <exclude reference="cds-Km-ovy"/>
+                                        <exclude reference="eP6-mO-CZ8"/>
+                                        <exclude reference="ekT-kX-bAa"/>
+                                    </mask>
+                                </variation>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="N7W-XD-vYl" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="7hs-2A-vLx"/>
-                            <constraint firstItem="hrb-DX-Bed" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="N6B-yl-Way"/>
-                            <constraint firstAttribute="trailing" secondItem="N7W-XD-vYl" secondAttribute="trailing" id="PvV-cD-ZFX"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="N7W-XD-vYl" secondAttribute="trailing" constant="-20" id="Rnm-1G-QSX"/>
-                            <constraint firstItem="N7W-XD-vYl" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="V1f-bx-d81"/>
-                            <constraint firstItem="N7W-XD-vYl" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="492" id="Xqm-63-4A0"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="N7W-XD-vYl" secondAttribute="bottom" id="ePf-P4-LpK"/>
-                            <constraint firstItem="hrb-DX-Bed" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="eR4-wN-0oi"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="hrb-DX-Bed" secondAttribute="trailing" constant="-20" id="ng4-Da-8R0"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="hrb-DX-Bed" secondAttribute="bottom" id="z4v-W3-jPy"/>
+                            <constraint firstItem="cxj-gK-0SO" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="503" id="5G2-0i-ca5"/>
+                            <constraint firstItem="cxj-gK-0SO" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6X0-eZ-55Z"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="N7W-XD-vYl" secondAttribute="bottom" id="HXq-2p-mkX"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="N7W-XD-vYl" secondAttribute="trailing" constant="-20" id="Hot-mp-w2i"/>
+                            <constraint firstItem="cxj-gK-0SO" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="503" id="KLn-fB-ZdW"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="hrb-DX-Bed" secondAttribute="trailing" constant="-20" id="Krp-P3-b79"/>
+                            <constraint firstItem="cxj-gK-0SO" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="503" id="OAL-w0-qoE"/>
+                            <constraint firstItem="cxj-gK-0SO" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="QXx-2S-1DM"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="hrb-DX-Bed" secondAttribute="bottom" id="Qow-cD-5Ze"/>
+                            <constraint firstItem="N7W-XD-vYl" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="ViN-nF-04R"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="cxj-gK-0SO" secondAttribute="bottom" constant="12" id="gHH-ng-nOy"/>
+                            <constraint firstItem="hrb-DX-Bed" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="mf9-K2-z5m"/>
+                            <constraint firstItem="hrb-DX-Bed" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="p4Y-cL-iRy"/>
+                            <constraint firstItem="cxj-gK-0SO" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="207" id="pS1-wc-WGb"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="cxj-gK-0SO" secondAttribute="trailing" constant="206" id="xDi-o5-JMC"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="cxj-gK-0SO" secondAttribute="bottom" constant="12" id="zN5-rQ-J5h"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="Rnm-1G-QSX"/>
-                                <exclude reference="V1f-bx-d81"/>
-                                <exclude reference="Xqm-63-4A0"/>
+                                <exclude reference="zN5-rQ-J5h"/>
+                                <exclude reference="5G2-0i-ca5"/>
+                                <exclude reference="6X0-eZ-55Z"/>
+                                <exclude reference="KLn-fB-ZdW"/>
+                                <exclude reference="OAL-w0-qoE"/>
+                                <exclude reference="pS1-wc-WGb"/>
+                                <exclude reference="xDi-o5-JMC"/>
                             </mask>
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Virtual Tourist" id="7hD-tY-94f"/>
                     <connections>
+                        <outlet property="label" destination="cxj-gK-0SO" id="N1v-JQ-QRX"/>
                         <outlet property="mapView" destination="hrb-DX-Bed" id="7hF-xd-TB5"/>
                         <outlet property="toolbar" destination="N7W-XD-vYl" id="Eui-Ff-Lgf"/>
                     </connections>
@@ -71,10 +95,10 @@
             </objects>
             <point key="canvasLocation" x="1520" y="547"/>
         </scene>
-        <!--View Controller-->
+        <!--Photo Album-->
         <scene sceneID="dDp-XF-lR5">
             <objects>
-                <viewController id="Y2t-ud-xZB" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoAlbum" id="Y2t-ud-xZB" customClass="PhotoAlbum" customModule="Virtual_Tourist" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9Ur-Wl-eo1"/>
                         <viewControllerLayoutGuide type="bottom" id="hXC-mv-XI0"/>

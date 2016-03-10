@@ -17,15 +17,18 @@ class ViewController: UIViewController, MKMapViewDelegate {
     let savedLatitude = "Saved Latitude"
     let savedLongitude = "Saved Longitude"
     let locationManager = CLLocationManager()
+    var editMode = Bool()
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var toolbar: UIToolbar!
+    @IBOutlet weak var label: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         locationManager.requestWhenInUseAuthorization()
         mapView.delegate = self
+        editMode = false
         
         plainView()
         initMap()
@@ -61,6 +64,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         let annotation = MKPointAnnotation()
         annotation.coordinate = pinLocation
         self.mapView.addAnnotation(annotation)
+        print("adding annotation")
         gestureRecognizer.enabled = true
     }
     
@@ -98,7 +102,6 @@ class ViewController: UIViewController, MKMapViewDelegate {
                                 view.transform = CGAffineTransformIdentity
                                 }, completion: nil)
                     })
-                    
             })
         }
     }
@@ -109,17 +112,37 @@ class ViewController: UIViewController, MKMapViewDelegate {
         NSUserDefaults.standardUserDefaults().setDouble(mapView.region.center.longitude, forKey: savedLongitude)
         NSUserDefaults.standardUserDefaults().setDouble(mapView.region.center.latitude, forKey: savedLatitude)
     }
+    
+    
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+        if editMode == false {
+        let backItem = UIBarButtonItem()
+        backItem.title = "OK"
+        navigationItem.backBarButtonItem = backItem
+        let photoAlbum = storyboard!.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbum
+        navigationController!.pushViewController(photoAlbum, animated: true)
+            print("segueing to PhotoAlbum")
+        } else {
+            let pin = view.annotation
+            mapView.removeAnnotation(pin!)
+            print("removing annotation")
+        }
+    }
 
     // MARK: UI Configuration
     
     func editView() {
+        editMode = true
         toolbar.hidden = false
+        label.hidden = false
         let editButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: "plainView")
         self.navigationItem.rightBarButtonItem = editButton
     }
     
     func plainView() {
+        editMode = false
         toolbar.hidden = true
+        label.hidden = true
         let editButton = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: "editView")
         self.navigationItem.rightBarButtonItem = editButton
     }

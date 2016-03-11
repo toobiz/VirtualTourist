@@ -7,15 +7,42 @@
 //
 
 import UIKit
+import MapKit
 
-class PhotoAlbum: UIViewController {
+class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate {
 
+    
+    @IBOutlet var flowLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var collectionButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.title = "Photo Album"
+        collectionView.delegate = self
+        
+        let space: CGFloat = 3.0
+        let dimension = (view.frame.size.width - (2 * space)) / 3.0
+        flowLayout.minimumInteritemSpacing = space
+        flowLayout.itemSize = CGSizeMake(dimension, dimension)
     }
     
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath)
+//        let meme = memes[indexPath.item]
+//        let imageView = UIImageView(image: "placeholder")
+        print("hello!")
+        return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 21
+    }
+    
+    @IBAction func newCollection(sender: AnyObject) {
+        print("adding new collection...")   
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

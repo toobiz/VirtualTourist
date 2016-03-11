@@ -19,6 +19,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
     let savedLongitude = "Saved Longitude"
     let locationManager = CLLocationManager()
     var editMode = Bool()
+    var pins: [Pin]!
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var toolbar: UIToolbar!
@@ -31,9 +32,26 @@ class ViewController: UIViewController, MKMapViewDelegate {
         mapView.delegate = self
         editMode = false
         
+        mapView.addAnnotations(fetchAllPins())
         plainView()
         initMap()
         initGestureRecognizer()
+    }
+    
+    // MARK: Core Data
+    
+    lazy var sharedContext: NSManagedObjectContext =  {
+        return CoreDataStackManager.sharedInstance().managedObjectContext
+    }()
+    
+    func fetchAllPins() -> [Pin] {
+        let fetchRequest = NSFetchRequest(entityName: "Pin")
+        do {
+            return try sharedContext.executeFetchRequest(fetchRequest) as! [Pin]
+        } catch let error as NSError {
+            print("Error in fetchAllActors(): \(error)")
+            return [Pin]()
+        }
     }
     
     // MARK: Map Configuration
@@ -59,57 +77,33 @@ class ViewController: UIViewController, MKMapViewDelegate {
     
     func addPin(gestureRecognizer:UIGestureRecognizer) {
         let tapPoint = gestureRecognizer.locationInView(mapView)
-        let tapLocation : CLLocationCoordinate2D = mapView.convertPoint(tapPoint, toCoordinateFromView: mapView)
+        let tapLocation = mapView.convertPoint(tapPoint, toCoordinateFromView: mapView)
+        
         if UIGestureRecognizerState.Began == gestureRecognizer.state {
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = tapLocation
             
-            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-            let pin = Pin(annotationLatitude: tapLocation.latitude, annotationLongitude: tapLocation.longitude, context: appDelegate.managedObjectContext)
-            
+            let pin = Pin(annotationLatitude: tapLocation.latitude, annotationLongitude: tapLocation.longitude, context: sharedContext)
+//
             mapView.addAnnotation(pin)
-            appDelegate.saveContext()
+            CoreDataStackManager.sharedInstance().saveContext()
 
         print("adding annotation")
         }
     }
     
-    func mapView(mapView: MKMapView, didAddAnnotationViews views: [MKAnnotationView]) {
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         
-        var i = -1;
-        for view in views {
-            i++;
-            if view.annotation is MKUserLocation {
-                continue;
-            }
-            
-            // Check if current annotation is inside visible map rect, else go to next one
-            let point:MKMapPoint  =  MKMapPointForCoordinate(view.annotation!.coordinate);
-            if (!MKMapRectContainsPoint(self.mapView.visibleMapRect, point)) {
-                continue;
-            }
-            
-            let endFrame:CGRect = view.frame;
-            
-            // Move annotation out of view
-            view.frame = CGRectMake(view.frame.origin.x, view.frame.origin.y - self.view.frame.size.height, view.frame.size.width, view.frame.size.height);
-            
-            // Animate drop
-            let delay = 0.03 * Double(i)
-            UIView.animateWithDuration(0.5, delay: delay, options: UIViewAnimationOptions.CurveEaseIn, animations:{() in
-                view.frame = endFrame
-                // Animate squash
-                }, completion:{(Bool) in
-                    UIView.animateWithDuration(0.05, delay: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations:{() in
-                        view.transform = CGAffineTransformMakeScale(1.0, 0.6)
-                        
-                        }, completion: {(Bool) in
-                            UIView.animateWithDuration(0.3, delay: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations:{() in
-                                view.transform = CGAffineTransformIdentity
-                                }, completion: nil)
-                    })
-            })
+        let reuseId = "pin"
+        var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = false
         }
+        else {
+            pinView!.annotation = annotation
+        }
+        pinView?.animatesDrop = true
+//        pinView?.draggable = true
+        return pinView
     }
     
     func mapView(mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
@@ -129,8 +123,10 @@ class ViewController: UIViewController, MKMapViewDelegate {
         navigationController!.pushViewController(photoAlbum, animated: true)
             print("segueing to PhotoAlbum")
         } else {
-            let pin = view.annotation
-            mapView.removeAnnotation(pin!)
+            let pin = view.annotation as! Pin
+            sharedContext.deleteObject(pin)
+            mapView.removeAnnotation(pin)
+            CoreDataStackManager.sharedInstance().saveContext()
             print("removing annotation")
         }
     }

@@ -10,8 +10,14 @@ import Foundation
 import CoreData
 import MapKit
 
+@objc(Pin)
 class Pin: NSManagedObject, MKAnnotation {
-
+    
+    struct Keys {
+        static let latitude = "latitude"
+        static let longitude = "longitude"
+    }
+    
     @NSManaged var latitude: NSNumber
     @NSManaged var longitude: NSNumber
     
@@ -19,6 +25,10 @@ class Pin: NSManagedObject, MKAnnotation {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: latitude as Double, longitude: longitude as Double)
+    }
+
     init(annotationLatitude: Double, annotationLongitude: Double, context: NSManagedObjectContext) {
         
         let entity = NSEntityDescription.entityForName("Pin", inManagedObjectContext: context)!
@@ -26,11 +36,7 @@ class Pin: NSManagedObject, MKAnnotation {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         
         latitude = NSNumber(double: annotationLatitude)
-        
         longitude = NSNumber(double: annotationLongitude)
-    }
-    
-    var coordinate: CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: latitude as Double, longitude: longitude as Double)
+
     }
 }

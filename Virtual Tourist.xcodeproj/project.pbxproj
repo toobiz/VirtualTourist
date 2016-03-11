@@ -10,6 +10,8 @@
 		2762FBD01C91D29C00A60257 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2762FBCE1C91D29C00A60257 /* Pin.swift */; };
 		2762FBD61C92D45000A60257 /* CoreDataStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2762FBD51C92D45000A60257 /* CoreDataStackManager.swift */; };
 		2762FBD91C92D59300A60257 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2762FBD71C92D59300A60257 /* Model.xcdatamodeld */; };
+		2762FBDD1C92F13500A60257 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2762FBDB1C92F13500A60257 /* Fabric.framework */; };
+		2762FBDE1C92F13500A60257 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2762FBDC1C92F13500A60257 /* Crashlytics.framework */; };
 		27681BBD1C8F20090093D929 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27681BBC1C8F20090093D929 /* AppDelegate.swift */; };
 		27681BBF1C8F20090093D929 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27681BBE1C8F20090093D929 /* ViewController.swift */; };
 		27681BC21C8F20090093D929 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27681BC01C8F20090093D929 /* Main.storyboard */; };
@@ -46,6 +48,8 @@
 		2762FBCE1C91D29C00A60257 /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Pin.swift; path = ../Pin.swift; sourceTree = "<group>"; };
 		2762FBD51C92D45000A60257 /* CoreDataStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackManager.swift; sourceTree = "<group>"; };
 		2762FBD81C92D59300A60257 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		2762FBDB1C92F13500A60257 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		2762FBDC1C92F13500A60257 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		27681BB91C8F20090093D929 /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		27681BBC1C8F20090093D929 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		27681BBE1C8F20090093D929 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -69,6 +73,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				27681BF11C9181FF0093D929 /* CoreLocation.framework in Frameworks */,
+				2762FBDE1C92F13500A60257 /* Crashlytics.framework in Frameworks */,
+				2762FBDD1C92F13500A60257 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +98,8 @@
 		27681BB01C8F20090093D929 = {
 			isa = PBXGroup;
 			children = (
+				2762FBDB1C92F13500A60257 /* Fabric.framework */,
+				2762FBDC1C92F13500A60257 /* Crashlytics.framework */,
 				27681BF01C9181FF0093D929 /* CoreLocation.framework */,
 				27681BBB1C8F20090093D929 /* Virtual Tourist */,
 				27681BD31C8F20090093D929 /* Virtual TouristTests */,
@@ -163,6 +171,7 @@
 				27681BB51C8F20090093D929 /* Sources */,
 				27681BB61C8F20090093D929 /* Frameworks */,
 				27681BB71C8F20090093D929 /* Resources */,
+				2762FBDA1C92F10500A60257 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -280,6 +289,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2762FBDA1C92F10500A60257 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 38f4c638368c677d787d19849cded91294d56f0c ae6e08310397f25bea6b0d01b084ebea1298e2dabd18496a9e09fc1d08b25eb7";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		27681BB51C8F20090093D929 /* Sources */ = {
@@ -435,6 +460,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Virtual Tourist/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = pl.weblify.virtualtourist;
@@ -446,6 +475,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Virtual Tourist/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = pl.weblify.virtualtourist;

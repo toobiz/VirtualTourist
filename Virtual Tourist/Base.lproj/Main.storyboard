@@ -107,11 +107,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="p5u-1Y-afl">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="90"/>
-                            </mapView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ueS-xW-Fjf">
-                                <rect key="frame" x="0.0" y="89" width="600" height="482"/>
+                                <rect key="frame" x="0.0" y="78" width="600" height="478"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="E9N-DW-qr3">
                                     <size key="itemSize" width="136" height="125"/>
@@ -134,11 +131,23 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
+                                            <constraint firstAttribute="bottomMargin" secondItem="v77-08-TOV" secondAttribute="bottom" constant="-8" id="Ldi-Ha-ZGc"/>
                                             <constraint firstAttribute="bottomMargin" secondItem="v77-08-TOV" secondAttribute="bottom" constant="-8" id="O0h-ZT-CZK"/>
+                                            <constraint firstItem="v77-08-TOV" firstAttribute="leading" secondItem="0hx-cn-Ozx" secondAttribute="leadingMargin" constant="-8" id="Wyz-mU-P7O"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="v77-08-TOV" secondAttribute="trailing" constant="-8" id="ZS3-ag-sbd"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="v77-08-TOV" secondAttribute="trailing" constant="-8" id="fZA-OK-jD0"/>
                                             <constraint firstItem="v77-08-TOV" firstAttribute="leading" secondItem="0hx-cn-Ozx" secondAttribute="leadingMargin" constant="-8" id="llr-ZU-vck"/>
+                                            <constraint firstItem="v77-08-TOV" firstAttribute="top" secondItem="0hx-cn-Ozx" secondAttribute="topMargin" constant="-8" id="x9F-1D-Ykk"/>
                                             <constraint firstItem="v77-08-TOV" firstAttribute="top" secondItem="0hx-cn-Ozx" secondAttribute="topMargin" constant="-8" id="xbP-6a-wLg"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="O0h-ZT-CZK"/>
+                                                <exclude reference="fZA-OK-jD0"/>
+                                                <exclude reference="llr-ZU-vck"/>
+                                                <exclude reference="xbP-6a-wLg"/>
+                                            </mask>
+                                        </variation>
                                         <connections>
                                             <outlet property="imageView" destination="v77-08-TOV" id="Y4j-W0-AfP"/>
                                         </connections>
@@ -150,25 +159,30 @@
                                 </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xB6-NF-TXH">
-                                <rect key="frame" x="247" y="570" width="107" height="30"/>
+                                <rect key="frame" x="240" y="562" width="120" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="New Collection"/>
                                 <connections>
                                     <action selector="newCollection:" destination="Y2t-ud-xZB" eventType="touchUpInside" id="rL8-4r-r2o"/>
                                 </connections>
                             </button>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="p5u-1Y-afl">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="135"/>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ueS-xW-Fjf" firstAttribute="top" secondItem="9Ur-Wl-eo1" secondAttribute="bottom" constant="69" id="0DF-VY-kQk"/>
+                            <constraint firstItem="ueS-xW-Fjf" firstAttribute="top" secondItem="9Ur-Wl-eo1" secondAttribute="bottom" constant="58" id="0DF-VY-kQk"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ueS-xW-Fjf" secondAttribute="trailing" constant="-20" id="2YQ-e2-072"/>
-                            <constraint firstItem="xB6-NF-TXH" firstAttribute="top" secondItem="ueS-xW-Fjf" secondAttribute="bottom" constant="-1" id="3cU-g5-bth"/>
+                            <constraint firstItem="xB6-NF-TXH" firstAttribute="top" secondItem="ueS-xW-Fjf" secondAttribute="bottom" constant="6" id="3cU-g5-bth"/>
                             <constraint firstItem="p5u-1Y-afl" firstAttribute="top" secondItem="9Ur-Wl-eo1" secondAttribute="bottom" constant="-20" id="NKc-2y-kaa"/>
                             <constraint firstItem="p5u-1Y-afl" firstAttribute="leading" secondItem="Ce0-Zd-Y4V" secondAttribute="leadingMargin" constant="-20" id="WAc-fh-khH"/>
-                            <constraint firstItem="hXC-mv-XI0" firstAttribute="top" secondItem="ueS-xW-Fjf" secondAttribute="bottom" constant="29" id="iby-Lv-Gf1"/>
+                            <constraint firstItem="hXC-mv-XI0" firstAttribute="top" secondItem="ueS-xW-Fjf" secondAttribute="bottom" constant="44" id="iby-Lv-Gf1"/>
                             <constraint firstAttribute="trailingMargin" secondItem="p5u-1Y-afl" secondAttribute="trailing" constant="-20" id="k3i-kS-a1s"/>
+                            <constraint firstItem="ueS-xW-Fjf" firstAttribute="top" secondItem="p5u-1Y-afl" secondAttribute="bottom" constant="-57" id="kkw-2s-huB"/>
                             <constraint firstItem="xB6-NF-TXH" firstAttribute="centerX" secondItem="Ce0-Zd-Y4V" secondAttribute="centerX" id="pH7-sV-bMC"/>
                             <constraint firstItem="ueS-xW-Fjf" firstAttribute="leading" secondItem="Ce0-Zd-Y4V" secondAttribute="leadingMargin" constant="-20" id="r0b-Z2-cUg"/>
-                            <constraint firstItem="hXC-mv-XI0" firstAttribute="top" secondItem="xB6-NF-TXH" secondAttribute="bottom" id="wW6-Yh-gg3"/>
+                            <constraint firstItem="hXC-mv-XI0" firstAttribute="top" secondItem="xB6-NF-TXH" secondAttribute="bottom" constant="8" id="wW6-Yh-gg3"/>
                         </constraints>
                     </view>
                     <connections>

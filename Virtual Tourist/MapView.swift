@@ -37,7 +37,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         initMap()
         initGestureRecognizer()
     }
-        
+    
     // MARK: Core Data
     
     lazy var sharedContext: NSManagedObjectContext =  {

@@ -37,7 +37,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         initMap()
         initGestureRecognizer()
     }
-    
+        
     // MARK: Core Data
     
     lazy var sharedContext: NSManagedObjectContext =  {
@@ -96,7 +96,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView!.canShowCallout = false
+//            pinView!.canShowCallout = false
         }
         else {
             pinView!.annotation = annotation
@@ -129,6 +129,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
             CoreDataStackManager.sharedInstance().saveContext()
             print("removing annotation")
         }
+        mapView.deselectAnnotation(view.annotation, animated: false)
     }
 
     // MARK: UI Configuration

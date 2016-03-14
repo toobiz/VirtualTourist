@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "ViewController.mapView(MKMapView, didSelectAnnotationView : MKAnnotationView) -&gt; ():MapView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "editMode">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

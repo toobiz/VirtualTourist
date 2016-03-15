@@ -17,6 +17,15 @@ class ViewController: UIViewController, MKMapViewDelegate {
     let savedLatitudeSpan = "Saved Latitude Span"
     let savedLatitude = "Saved Latitude"
     let savedLongitude = "Saved Longitude"
+    
+//    var currentLongitude : Double = 0.0
+//    var currentLatitude : Double = 0.0
+    
+    var longitude : Double = 0.0
+    var latitude : Double = 0.0
+    var latitudeDelta : Double = 0.0
+    var longitudeDelta : Double = 0.0
+    
     let locationManager = CLLocationManager()
     var editMode = Bool()
     var pins: [Pin]!
@@ -33,9 +42,26 @@ class ViewController: UIViewController, MKMapViewDelegate {
         editMode = false
         
         mapView.addAnnotations(fetchAllPins())
+        pins = fetchAllPins()
         plainView()
         initMap()
         initGestureRecognizer()
+    }
+    
+    // MARK: Lat/Lon Manipulation
+    
+    func createBoundingBoxString() -> String {
+        
+//        let latitude = (self.latitudeTextField.text! as NSString).doubleValue
+//        let longitude = (self.longitudeTextField.text! as NSString).doubleValue
+        
+        let bottom_left_lon = max(longitude - FlickrClient.Constants.BOUNDING_BOX_HALF_WIDTH, FlickrClient.Constants.LON_MIN)
+        let bottom_left_lat = max(latitude - FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LAT_MIN)
+        let top_right_lon = min(longitude + FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LON_MAX)
+        let top_right_lat = min(latitude + FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LAT_MAX)
+        
+        print("bbox is: \(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)")
+        return "\(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)"
     }
     
     // MARK: Core Data
@@ -56,10 +82,10 @@ class ViewController: UIViewController, MKMapViewDelegate {
     
     // MARK: Map Configuration
     func initMap() {
-        let longitudeDelta = NSUserDefaults.standardUserDefaults().doubleForKey(savedLongitudeSpan)
-        let latitudeDelta = NSUserDefaults.standardUserDefaults().doubleForKey(savedLatitudeSpan)
-        let longitude = NSUserDefaults.standardUserDefaults().doubleForKey(savedLongitude)
-        let latitude = NSUserDefaults.standardUserDefaults().doubleForKey(savedLatitude)
+        longitudeDelta = NSUserDefaults.standardUserDefaults().doubleForKey(savedLongitudeSpan)
+        latitudeDelta = NSUserDefaults.standardUserDefaults().doubleForKey(savedLatitudeSpan)
+        longitude = NSUserDefaults.standardUserDefaults().doubleForKey(savedLongitude)
+        latitude = NSUserDefaults.standardUserDefaults().doubleForKey(savedLatitude)
         
         if !(latitude == 0 && longitude == 0) {
             let span = MKCoordinateSpanMake(latitudeDelta, longitudeDelta)
@@ -82,12 +108,21 @@ class ViewController: UIViewController, MKMapViewDelegate {
         if UIGestureRecognizerState.Began == gestureRecognizer.state {
             
             let pin = Pin(annotationLatitude: tapLocation.latitude, annotationLongitude: tapLocation.longitude, context: sharedContext)
-//
+            
+            print("adding annotation")
+            
             mapView.addAnnotation(pin)
             CoreDataStackManager.sharedInstance().saveContext()
-
-        print("adding annotation")
+            
         }
+//        let bottom_left_lon = max(tapLocation.longitude - FlickrClient.Constants.BOUNDING_BOX_HALF_WIDTH, FlickrClient.Constants.LON_MIN)
+//        let bottom_left_lat = max(tapLocation.latitude - FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LAT_MIN)
+//        let top_right_lon = min(tapLocation.longitude + FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LON_MAX)
+//        let top_right_lat = min(tapLocation.latitude + FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LAT_MAX)
+//        
+//        print("bbox is: \(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)")
+//        return "\(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)"
+
     }
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
@@ -119,9 +154,22 @@ class ViewController: UIViewController, MKMapViewDelegate {
         let backItem = UIBarButtonItem()
         backItem.title = "OK"
         navigationItem.backBarButtonItem = backItem
+        
+            let selectedLoc = view.annotation
+            latitude = (selectedLoc?.coordinate.latitude)!
+            longitude = (selectedLoc?.coordinate.longitude)!
+            
+            
         let photoAlbum = storyboard!.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbum
         navigationController!.pushViewController(photoAlbum, animated: true)
+            
+            photoAlbum.bbox = createBoundingBoxString()
+
+            
             print("segueing to PhotoAlbum")
+        
+
+            
         } else {
             let pin = view.annotation as! Pin
             sharedContext.deleteObject(pin)
@@ -131,6 +179,10 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
         mapView.deselectAnnotation(view.annotation, animated: false)
     }
+    
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//
+//    }
 
     // MARK: UI Configuration
     

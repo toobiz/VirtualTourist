@@ -16,6 +16,8 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionButton: UIButton!
     
+    var bbox : String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,13 +28,17 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         let dimension = (view.frame.size.width - (2 * space)) / 3.0
         flowLayout.minimumInteritemSpacing = space
         flowLayout.itemSize = CGSizeMake(dimension, dimension)
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        FlickrClient.sharedInstance().getImageFromFlickrBySearch(bbox)
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath)
 //        let meme = memes[indexPath.item]
 //        let imageView = UIImageView(image: "placeholder")
-        print("hello!")
         return cell
     }
     

@@ -34,8 +34,12 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        if pin.photos.isEmpty {
         FlickrClient.sharedInstance().getImageFromFlickrBySearch(bbox) { (success, results, errorString) in
             
+        }
+        }else {
+            print("Some photos have already been downloaded for the chosen pin")
         }
     }
     

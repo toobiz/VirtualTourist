@@ -3,6 +3,14 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "PhotoAlbum.viewWillAppear(Bool) -&gt; ():PhotoAlbum.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pin">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "ViewController.mapView(MKMapView, didSelectAnnotationView : MKAnnotationView) -&gt; ():MapView.swift">
          <PersistentStrings>
             <PersistentString

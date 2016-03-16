@@ -17,6 +17,7 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     @IBOutlet weak var collectionButton: UIButton!
     
     var bbox : String = ""
+    var pin : Pin!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,11 +29,14 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         let dimension = (view.frame.size.width - (2 * space)) / 3.0
         flowLayout.minimumInteritemSpacing = space
         flowLayout.itemSize = CGSizeMake(dimension, dimension)
-        
     }
     
     override func viewWillAppear(animated: Bool) {
-        FlickrClient.sharedInstance().getImageFromFlickrBySearch(bbox)
+        super.viewWillAppear(animated)
+        
+        FlickrClient.sharedInstance().getImageFromFlickrBySearch(bbox) { (success, results, errorString) in
+            
+        }
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -47,7 +51,8 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     }
     
     @IBAction func newCollection(sender: AnyObject) {
-        print("adding new collection...")   
+        print("adding new collection...")
+//        FlickrClient.sharedInstance().getImageFromFlickrBySearch(bbox)
     }
 
     override func didReceiveMemoryWarning() {

@@ -47,18 +47,20 @@ class FlickrClient : NSObject {
     
     // MARK: Flickr API
     
-    func getImageFromFlickrBySearch(bbox: String) {
+    func getImageFromFlickrBySearch(bbox: String, completionHandler: (success: Bool, photos: [[String: AnyObject]], errorString: String?) -> Void) {
         
-        var withPageDictionary = FlickrClient.methodArguments
-        withPageDictionary["page"] = "1"
-        withPageDictionary["bbox"] = bbox
+        var withBboxDictionary = FlickrClient.methodArguments
+//        withPageDictionary["page"] = "1"
+        withBboxDictionary["bbox"] = bbox
 
         let session = NSURLSession.sharedSession()
-        let urlString = FlickrClient.Constants.BASE_URL + escapedParameters(withPageDictionary)
+        let urlString = FlickrClient.Constants.BASE_URL + escapedParameters(withBboxDictionary)
         let url = NSURL(string: urlString)!
         let request = NSURLRequest(URL: url)
         
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
+            
+            print("Downloadig new photos...")
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
@@ -100,7 +102,7 @@ class FlickrClient : NSObject {
                 return
             }
             
-            print(parsedResult)
+//            print(parsedResult)
             
             /* GUARD: Is "photos" key in our result? */
             guard let photosDictionary = parsedResult["photos"] as? NSDictionary else {
@@ -118,19 +120,18 @@ class FlickrClient : NSObject {
             /* Pick a random page! */
             let pageLimit = min(totalPages, 40)
             let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
-//            FlickrClient.sharedInstance().getImageFromFlickrBySearchWithPage(FlickrClient.methodArguments, pageNumber: randomPage)
+            FlickrClient.sharedInstance().getImageFromFlickrBySearchWithPage(withBboxDictionary, pageNumber: randomPage, bbox: bbox)
         }
         
         task.resume()
     }
     
-    func getImageFromFlickrBySearchWithPage(methodArguments: [String : AnyObject], pageNumber: Int) {
+    func getImageFromFlickrBySearchWithPage(methodArguments: [String : AnyObject], pageNumber: Int, bbox: String) {
         
         /* Add the page to the method's arguments */
-        print(FlickrClient.methodArguments)
+
         var withPageDictionary = methodArguments
         withPageDictionary["page"] = pageNumber
-        print(FlickrClient.methodArguments)
         
         let session = NSURLSession.sharedSession()
         let urlString = FlickrClient.Constants.BASE_URL + escapedParameters(withPageDictionary)
@@ -198,42 +199,44 @@ class FlickrClient : NSObject {
             
             if totalPhotosVal > 0 {
                 
-                /* GUARD: Is the "photo" key in photosDictionary? */
-                guard let photosArray = photosDictionary["photo"] as? [[String: AnyObject]] else {
-                    print("Cannot find key 'photo' in \(photosDictionary)")
-                    return
-                }
+                print("Found some photos")
                 
-                let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
-                let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
-                let photoTitle = photoDictionary["title"] as? String /* non-fatal */
-                
-                /* GUARD: Does our photo have a key for 'url_m'? */
-                guard let imageUrlString = photoDictionary["url_m"] as? String else {
-                    print("Cannot find key 'url_m' in \(photoDictionary)")
-                    return
-                }
-                
-                let imageURL = NSURL(string: imageUrlString)
-                if let imageData = NSData(contentsOfURL: imageURL!) {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        
-//                        self.defaultLabel.alpha = 0.0
-//                        self.photoImageView.image = UIImage(data: imageData)
-                        
-                        if methodArguments["bbox"] != nil {
-                            if let photoTitle = photoTitle {
-//                                print ("\(self.getLatLonString()) \(photoTitle)")
-                            } else {
-//                                print( "\(self.getLatLonString()) (Untitled)")
-                            }
-                        } else {
-//                            self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
-                        }
-                    })
-                } else {
-                    print("Image does not exist at \(imageURL)")
-                }
+//                /* GUARD: Is the "photo" key in photosDictionary? */
+//                guard let photosArray = photosDictionary["photo"] as? [[String: AnyObject]] else {
+//                    print("Cannot find key 'photo' in \(photosDictionary)")
+//                    return
+//                }
+//                
+//                let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
+//                let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
+//                let photoTitle = photoDictionary["title"] as? String /* non-fatal */
+//                
+//                /* GUARD: Does our photo have a key for 'url_m'? */
+//                guard let imageUrlString = photoDictionary["url_m"] as? String else {
+//                    print("Cannot find key 'url_m' in \(photoDictionary)")
+//                    return
+//                }
+//                
+//                let imageURL = NSURL(string: imageUrlString)
+//                if let imageData = NSData(contentsOfURL: imageURL!) {
+//                    dispatch_async(dispatch_get_main_queue(), {
+//                        
+////                        self.defaultLabel.alpha = 0.0
+////                        self.photoImageView.image = UIImage(data: imageData)
+//                        
+//                        if methodArguments["bbox"] != nil {
+//                            if let photoTitle = photoTitle {
+////                                print ("\(self.getLatLonString()) \(photoTitle)")
+//                            } else {
+////                                print( "\(self.getLatLonString()) (Untitled)")
+//                            }
+//                        } else {
+////                            self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
+//                        }
+//                    })
+//                } else {
+//                    print("Image does not exist at \(imageURL)")
+//                }
             } else {
                 dispatch_async(dispatch_get_main_queue(), {
                     print( "No Photos Found. Search Again.")

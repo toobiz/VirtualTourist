@@ -52,9 +52,6 @@ class ViewController: UIViewController, MKMapViewDelegate {
     
     func createBoundingBoxString() -> String {
         
-//        let latitude = (self.latitudeTextField.text! as NSString).doubleValue
-//        let longitude = (self.longitudeTextField.text! as NSString).doubleValue
-        
         let bottom_left_lon = max(longitude - FlickrClient.Constants.BOUNDING_BOX_HALF_WIDTH, FlickrClient.Constants.LON_MIN)
         let bottom_left_lat = max(latitude - FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LAT_MIN)
         let top_right_lon = min(longitude + FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LON_MAX)
@@ -113,16 +110,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
             
             mapView.addAnnotation(pin)
             CoreDataStackManager.sharedInstance().saveContext()
-            
         }
-//        let bottom_left_lon = max(tapLocation.longitude - FlickrClient.Constants.BOUNDING_BOX_HALF_WIDTH, FlickrClient.Constants.LON_MIN)
-//        let bottom_left_lat = max(tapLocation.latitude - FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LAT_MIN)
-//        let top_right_lon = min(tapLocation.longitude + FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LON_MAX)
-//        let top_right_lat = min(tapLocation.latitude + FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LAT_MAX)
-//        
-//        print("bbox is: \(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)")
-//        return "\(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)"
-
     }
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
@@ -165,11 +153,8 @@ class ViewController: UIViewController, MKMapViewDelegate {
             
             photoAlbum.bbox = createBoundingBoxString()
 
-            
             print("segueing to PhotoAlbum")
-        
-
-            
+          
         } else {
             let pin = view.annotation as! Pin
             sharedContext.deleteObject(pin)

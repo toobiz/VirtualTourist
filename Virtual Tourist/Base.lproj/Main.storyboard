@@ -124,7 +124,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="136" height="125"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="v77-08-TOV">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v77-08-TOV">
                                                     <rect key="frame" x="0.0" y="0.0" width="136" height="125"/>
                                                 </imageView>
                                             </subviews>
@@ -189,6 +189,7 @@
                         <outlet property="collectionButton" destination="xB6-NF-TXH" id="PN4-bm-V5W"/>
                         <outlet property="collectionView" destination="ueS-xW-Fjf" id="h1A-kg-Q0F"/>
                         <outlet property="flowLayout" destination="E9N-DW-qr3" id="ogl-dw-PR1"/>
+                        <outlet property="mapView" destination="p5u-1Y-afl" id="aAi-11-rKi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PiD-W2-RQ1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -214,7 +215,4 @@
             <point key="canvasLocation" x="708" y="547"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="placeholder" width="92" height="138"/>
-    </resources>
 </document>

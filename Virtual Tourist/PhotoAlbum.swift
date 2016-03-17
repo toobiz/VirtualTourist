@@ -15,13 +15,24 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     @IBOutlet var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionButton: UIButton!
+    @IBOutlet weak var mapView: MKMapView!
     
+    var annotation: MKAnnotation!
+    var region: MKCoordinateRegion!
     var bbox : String = ""
-    var pin : Pin!
+    var photos = [Photo]()
+    
+    func setMapViewAnnotation(annotation: MKAnnotation) {
+        self.annotation = annotation
+    }
+    
+    func setRegionForView(region: MKCoordinateRegion) {
+        self.region = region
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.title = "Photo Album"
         collectionView.delegate = self
         
@@ -29,24 +40,39 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         let dimension = (view.frame.size.width - (2 * space)) / 3.0
         flowLayout.minimumInteritemSpacing = space
         flowLayout.itemSize = CGSizeMake(dimension, dimension)
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        if pin.photos.isEmpty {
+        mapView.addAnnotation(annotation)
+        mapView.setRegion(region, animated: true)
+        self.mapView.centerCoordinate = annotation.coordinate
+                
         FlickrClient.sharedInstance().getImageFromFlickrBySearch(bbox) { (success, results, errorString) in
-            
+            if success {
+                for (photo) in results {
+                    
+                }
+            } else {
+                print(errorString)
+            }
         }
-        }else {
-            print("Some photos have already been downloaded for the chosen pin")
-        }
+
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath)
-//        let meme = memes[indexPath.item]
-//        let imageView = UIImageView(image: "placeholder")
+        
+        let url = NSURL(string: "https://farm1.staticflickr.com/645/22242955265_5549fe3d70.jpg")
+        let data = NSData(contentsOfURL: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check
+        let image = UIImage(data: data!)
+        
+        let imageView = UIImageView(image: image)
+        
+//        imageView.contentMode = UIViewContentMode.Redraw
+        cell.backgroundView = imageView
         return cell
     }
     

@@ -15,11 +15,11 @@ class Photo : NSManagedObject {
     
     struct Keys {
         static let ID = "id"
-        static let ImagePath = "image_path"
-        static let Name = "name"
+        static let ImagePath = "url_m"
+        static let Name = "title"
     }
     
-    @NSManaged var id: NSNumber
+    @NSManaged var id: String
     @NSManaged var imagePath: String
     @NSManaged var name: String
     @NSManaged var pins: Pin?
@@ -35,8 +35,8 @@ class Photo : NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         
         // Dictionary
-        id = dictionary[Keys.ID] as! Int
         imagePath = dictionary[Keys.ImagePath] as! String
+        id = dictionary[Keys.ID] as! String
         name = dictionary[Keys.Name] as! String
     }
 }

@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate {
 
@@ -16,11 +17,13 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionButton: UIButton!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var label: UILabel!
     
     var annotation: MKAnnotation!
     var region: MKCoordinateRegion!
     var bbox : String = ""
-    var photos = [Photo]()
+    var pin : Pin!
+    var images = [Image]()
     
     func setMapViewAnnotation(annotation: MKAnnotation) {
         self.annotation = annotation
@@ -46,38 +49,76 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        label.hidden = true
+        
+        collectionButton.enabled = false;
+        
         mapView.addAnnotation(annotation)
         mapView.setRegion(region, animated: true)
         self.mapView.centerCoordinate = annotation.coordinate
-                
-        FlickrClient.sharedInstance().getImageFromFlickrBySearch(bbox) { (success, results, errorString) in
-            if success {
-                for (photo) in results {
+        
+//        if pin!.photos.isEmpty {
+            FlickrClient.sharedInstance().getImageFromFlickrBySearch(bbox) { (success, results, errorString) in
+                if success {
+                    for (photo) in results {
+                        
+                        let imageUrlString = photo["url_m"] as? String
+                        let imageURL = NSURL(string: imageUrlString!)
+                        let imageData = NSData(contentsOfURL: imageURL!)
+                        let image = UIImage(data: imageData!)
+                        let newPhoto = Image(image: image!)
+                        self.images.append(newPhoto)
+                        
+                        _ = results.map() { (dictionary: [String : AnyObject]) -> Photo in
+                            let photo = Photo(dictionary: dictionary, context: self.sharedContext)
+                            
+//                            photo.pins = self.pin
+                            
+                            return photo
+                        }
+                        
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.collectionView?.reloadData()
+                            self.collectionButton.enabled = true
+                        }
+                        CoreDataStackManager.sharedInstance().saveContext()
+                    }
+                } else {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.label.text = errorString
+                        self.label.hidden = false
+                        self.collectionButton.enabled = true
+                    }
                     
                 }
-            } else {
-                print(errorString)
             }
-        }
-
+//        }
     }
     
+    // MARK: Core Data
+    
+    lazy var sharedContext: NSManagedObjectContext =  {
+        return CoreDataStackManager.sharedInstance().managedObjectContext
+    }()
+    
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath)
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! CollectionViewCell
         
-        let url = NSURL(string: "https://farm1.staticflickr.com/645/22242955265_5549fe3d70.jpg")
-        let data = NSData(contentsOfURL: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check
-        let image = UIImage(data: data!)
+//        cell.imageView.image = UIImage(named: "placeholder")
         
-        let imageView = UIImageView(image: image)
+        let photo = images[indexPath.item]
+        let photoImageView = UIImageView(image: photo.image)
+//        photoImageView.contentMode = UIViewContentMode.Redraw
+        cell.imageView.image = photoImageView.image
         
-//        imageView.contentMode = UIViewContentMode.Redraw
-        cell.backgroundView = imageView
+        
+        
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 21
+//        print ("number of images: \(images.count)")
+        return images.count
     }
     
     @IBAction func newCollection(sender: AnyObject) {

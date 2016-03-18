@@ -120,13 +120,13 @@ class FlickrClient : NSObject {
             /* Pick a random page! */
             let pageLimit = min(totalPages, 40)
             let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
-            FlickrClient.sharedInstance().getImageFromFlickrBySearchWithPage(withBboxDictionary, pageNumber: randomPage, bbox: bbox)
+            FlickrClient.sharedInstance().getImageFromFlickrBySearchWithPage(withBboxDictionary, pageNumber: randomPage, bbox: bbox, completionHandler: completionHandler)
         }
         
         task.resume()
     }
     
-    func getImageFromFlickrBySearchWithPage(methodArguments: [String : AnyObject], pageNumber: Int, bbox: String) {
+    func getImageFromFlickrBySearchWithPage(methodArguments: [String : AnyObject], pageNumber: Int, bbox: String, completionHandler: (success: Bool, photos: [[String: AnyObject]], errorString: String?) -> Void) {
         
         /* Add the page to the method's arguments */
 
@@ -201,47 +201,17 @@ class FlickrClient : NSObject {
                 
                 print("Found some photos")
                 
-//                /* GUARD: Is the "photo" key in photosDictionary? */
-//                guard let photosArray = photosDictionary["photo"] as? [[String: AnyObject]] else {
-//                    print("Cannot find key 'photo' in \(photosDictionary)")
-//                    return
-//                }
-//                
-//                let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
-//                let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
-//                let photoTitle = photoDictionary["title"] as? String /* non-fatal */
-//                
-//                /* GUARD: Does our photo have a key for 'url_m'? */
-//                guard let imageUrlString = photoDictionary["url_m"] as? String else {
-//                    print("Cannot find key 'url_m' in \(photoDictionary)")
-//                    return
-//                }
-//                
-//                let imageURL = NSURL(string: imageUrlString)
-//                if let imageData = NSData(contentsOfURL: imageURL!) {
-//                    dispatch_async(dispatch_get_main_queue(), {
-//                        
-////                        self.defaultLabel.alpha = 0.0
-////                        self.photoImageView.image = UIImage(data: imageData)
-//                        
-//                        if methodArguments["bbox"] != nil {
-//                            if let photoTitle = photoTitle {
-////                                print ("\(self.getLatLonString()) \(photoTitle)")
-//                            } else {
-////                                print( "\(self.getLatLonString()) (Untitled)")
-//                            }
-//                        } else {
-////                            self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
-//                        }
-//                    })
-//                } else {
-//                    print("Image does not exist at \(imageURL)")
-//                }
+                /* GUARD: Is the "photo" key in photosDictionary? */
+                guard let results = photosDictionary["photo"] as? [[String: AnyObject]] else {
+                    print("Cannot find key 'photo' in \(photosDictionary)")
+                    return
+                }
+                completionHandler(success: true, photos: results, errorString: nil)
+
             } else {
                 dispatch_async(dispatch_get_main_queue(), {
                     print( "No Photos Found. Search Again.")
-//                    self.defaultLabel.alpha = 1.0
-//                    self.photoImageView.image = nil
+                    completionHandler(success: false, photos: [], errorString: "This pin has no images.")
                 })
             }
         }

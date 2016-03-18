@@ -25,7 +25,8 @@ class ViewController: UIViewController, MKMapViewDelegate {
     
     let locationManager = CLLocationManager()
     var editMode = Bool()
-    var pins: [Pin]!
+    var pins = [Pin]()
+//    var pin: Pin!
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var toolbar: UIToolbar!
@@ -155,6 +156,8 @@ class ViewController: UIViewController, MKMapViewDelegate {
             
         let photoAlbum = storyboard!.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbum
         navigationController!.pushViewController(photoAlbum, animated: true)
+            
+//            photoAlbum.pin = pins[0]
             
             photoAlbum.bbox = createBoundingBoxString()
             photoAlbum.setMapViewAnnotation(view.annotation!)

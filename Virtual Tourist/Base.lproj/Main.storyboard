@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Q6Q-ga-t54">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Q6Q-ga-t54">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -176,6 +176,10 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="p5u-1Y-afl">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="135"/>
                             </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9BW-Np-lWT">
+                                <rect key="frame" x="217" y="562" width="167" height="30"/>
+                                <state key="normal" title="Remove Selected Pictures"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -184,6 +188,9 @@
                             <constraint firstItem="xB6-NF-TXH" firstAttribute="top" secondItem="ueS-xW-Fjf" secondAttribute="bottom" constant="6" id="3cU-g5-bth"/>
                             <constraint firstItem="p5u-1Y-afl" firstAttribute="top" secondItem="9Ur-Wl-eo1" secondAttribute="bottom" constant="-20" id="NKc-2y-kaa"/>
                             <constraint firstItem="p5u-1Y-afl" firstAttribute="leading" secondItem="Ce0-Zd-Y4V" secondAttribute="leadingMargin" constant="-20" id="WAc-fh-khH"/>
+                            <constraint firstItem="9BW-Np-lWT" firstAttribute="top" secondItem="ueS-xW-Fjf" secondAttribute="bottom" constant="6" id="YaD-BG-F63"/>
+                            <constraint firstItem="9BW-Np-lWT" firstAttribute="centerX" secondItem="Ce0-Zd-Y4V" secondAttribute="centerX" id="eyg-tD-xSq"/>
+                            <constraint firstItem="hXC-mv-XI0" firstAttribute="top" secondItem="9BW-Np-lWT" secondAttribute="bottom" constant="8" id="fxd-Rc-sGj"/>
                             <constraint firstItem="hXC-mv-XI0" firstAttribute="top" secondItem="ueS-xW-Fjf" secondAttribute="bottom" constant="44" id="iby-Lv-Gf1"/>
                             <constraint firstAttribute="trailingMargin" secondItem="p5u-1Y-afl" secondAttribute="trailing" constant="-20" id="k3i-kS-a1s"/>
                             <constraint firstItem="ueS-xW-Fjf" firstAttribute="top" secondItem="p5u-1Y-afl" secondAttribute="bottom" constant="-57" id="kkw-2s-huB"/>
@@ -198,6 +205,7 @@
                         <outlet property="flowLayout" destination="E9N-DW-qr3" id="ogl-dw-PR1"/>
                         <outlet property="label" destination="P1g-6n-mNE" id="vpK-bK-qOJ"/>
                         <outlet property="mapView" destination="p5u-1Y-afl" id="aAi-11-rKi"/>
+                        <outlet property="removeButton" destination="9BW-Np-lWT" id="ym5-JT-CC3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PiD-W2-RQ1" userLabel="First Responder" sceneMemberID="firstResponder"/>

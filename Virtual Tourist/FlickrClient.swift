@@ -45,6 +45,12 @@ class FlickrClient : NSObject {
         "per_page" : "21",
     ]
     
+    // MARK: - Shared Image Cache
+    
+    struct Caches {
+        static let imageCache = ImageCache()
+    }
+    
     // MARK: Flickr API
     
     func getImageFromFlickrBySearch(bbox: String, completionHandler: (success: Bool, photos: [[String: AnyObject]], errorString: String?) -> Void) {

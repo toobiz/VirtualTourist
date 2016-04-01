@@ -19,10 +19,10 @@ class Photo : NSManagedObject {
         static let Name = "title"
     }
     
-    @NSManaged var id: String
-    @NSManaged var imagePath: String
+    @NSManaged var id: NSNumber
+    @NSManaged var imagePath: String?
     @NSManaged var name: String
-    @NSManaged var pins: Pin?
+    @NSManaged var pin: Pin?
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
@@ -35,8 +35,19 @@ class Photo : NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         
         // Dictionary
-        imagePath = dictionary[Keys.ImagePath] as! String
-        id = dictionary[Keys.ID] as! String
+        imagePath = dictionary[Keys.ImagePath] as? String
+        id = Int((dictionary[Keys.ID] as? String)!)!
         name = dictionary[Keys.Name] as! String
+    }
+    
+    var image: UIImage? {
+        
+        get {
+            return FlickrClient.Caches.imageCache.imageWithIdentifier(imagePath)
+        }
+        
+        set {
+            FlickrClient.Caches.imageCache.storeImage(newValue, withIdentifier: imagePath!)
+        }
     }
 }

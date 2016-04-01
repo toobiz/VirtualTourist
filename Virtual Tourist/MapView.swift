@@ -144,6 +144,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
     }
     
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+        
         if editMode == false {
         let backItem = UIBarButtonItem()
         backItem.title = "OK"
@@ -153,11 +154,12 @@ class ViewController: UIViewController, MKMapViewDelegate {
             latitude = (selectedLoc?.coordinate.latitude)!
             longitude = (selectedLoc?.coordinate.longitude)!
             
-            
         let photoAlbum = storyboard!.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbum
         navigationController!.pushViewController(photoAlbum, animated: true)
+
+            let pin = view.annotation as! Pin
             
-//            photoAlbum.pin = pins[0]
+            photoAlbum.pin = pin
             
             photoAlbum.bbox = createBoundingBoxString()
             photoAlbum.setMapViewAnnotation(view.annotation!)

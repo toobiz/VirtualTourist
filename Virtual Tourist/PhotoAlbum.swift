@@ -79,70 +79,29 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
             
             if let error = error {
                 print(error)
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.label.hidden = false
+                    self.label.text = error
+                }
             } else {
                 if let photoDictionaries = results as? [[String : AnyObject]] {
                     print(photoDictionaries)
                     
-                    // Parse the array of movies dictionaries
-                    _ = photoDictionaries.map() { (dictionary: [String : AnyObject]) -> Photo in
-                        let photo = Photo(dictionary: dictionary, context: self.sharedContext)
-                        photo.pin = self.pin
-                        return photo
-                    }
-                    
-                    // Update collection view on the main thread
-                    
                     dispatch_async(dispatch_get_main_queue()) {
-                        self.collectionView?.reloadData()
-                        self.collectionButton.enabled = true
-                    }
-                    CoreDataStackManager.sharedInstance().saveContext()
-                } else {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.label.text = error
-                        self.label.hidden = false
-                        self.collectionButton.enabled = true
+                        
+                        // Parse the array of movies dictionaries
+                        _ = photoDictionaries.map() { (dictionary: [String : AnyObject]) -> Photo in
+                            let photo = Photo(dictionary: dictionary, context: self.sharedContext)
+                            photo.pin = self.pin
+                            CoreDataStackManager.sharedInstance().saveContext()
+                            self.collectionView?.reloadData()
+                            return photo
+                        }
                     }
                 }
             }
         }
-        
-//        FlickrClient.sharedInstance().getImageFromFlickrBySearch(bbox) { (success, results, errorString) in
-//            
-//            if success {
-//                for (photo) in results {
-//                    
-//                    let imageUrlString = photo["url_m"] as? String
-//                    
-//                    
-//                    
-//                    let imageURL = NSURL(string: imageUrlString!)
-//                    let imageData = NSData(contentsOfURL: imageURL!)
-//                    let image = UIImage(data: imageData!)
-//                    let newPhoto = Image(image: image!)
-//                    self.images.append(newPhoto)
-//                    
-//                    _ = results.map() { (dictionary: [String : AnyObject]) -> Photo in
-//                        let photo = Photo(dictionary: dictionary, context: self.sharedContext)
-////                         photo.pins = self.pin
-//                        return photo
-//                    }
-//                    
-//                    dispatch_async(dispatch_get_main_queue()) {
-//                        self.collectionView?.reloadData()
-//                        self.collectionButton.enabled = true
-//                    }
-//                    CoreDataStackManager.sharedInstance().saveContext()
-//                }
-//            } else {
-//                dispatch_async(dispatch_get_main_queue()) {
-//                    self.label.text = errorString
-//                    self.label.hidden = false
-//                    self.collectionButton.enabled = true
-//                }
-//                
-//            }
-//        }
+        self.collectionButton.enabled = true
     }
     
     // MARK: Core Data
@@ -173,16 +132,9 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
-        let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
-        
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! CollectionViewCell
-        
-        if photo.image != nil {
-            cell.imageView.image = photo.image
-        } else {
-            cell.imageView.image = UIImage(named: "placeholder")
-        }
-        
+        configureCell(cell, atIndexPath: indexPath)
+     
         if (cell.selected) {
             cell.alpha = 0.5
         } else {
@@ -190,6 +142,52 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         }
         
         return cell
+    }
+    
+    func configureCell(cell: CollectionViewCell, atIndexPath indexPath: NSIndexPath) {
+        
+        var photoImage = UIImage()
+        
+        // Load photo
+        let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
+        
+        // Set the photo image
+        if photo.imagePath == nil || photo.imagePath == "" {
+            photoImage = UIImage(named: "placeholder")!
+            print("Image not available")
+            
+        } else if photo.image != nil {
+            photoImage = photo.image!
+            print("Image retrieved from cache")
+        } else {
+            
+            let task = FlickrClient.sharedInstance().taskForImageWithSize(photo.imagePath!) { imageData, error in
+                
+                if let error = error {
+                    photoImage = UIImage(named: "placeholder")!
+                    print("Image download error")
+                    dispatch_async(dispatch_get_main_queue()) {
+                        cell.imageView.image = photoImage
+                        
+                    }
+                }
+                
+                if let data = imageData {
+                    print("Image download successful")
+                    photoImage = UIImage(data: data)!
+                    dispatch_async(dispatch_get_main_queue()) {
+                        photo.image = photoImage
+                    }
+                    dispatch_async(dispatch_get_main_queue()) {
+                        cell.imageView!.image = photoImage
+                    }
+                }
+                
+            }
+            
+        }
+        
+        cell.imageView!.image = photoImage
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

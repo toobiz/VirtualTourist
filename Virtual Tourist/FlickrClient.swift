@@ -10,6 +10,13 @@ import Foundation
 
 class FlickrClient : NSObject {
     
+    var session: NSURLSession
+    
+    override init() {
+        session = NSURLSession.sharedSession()
+        super.init()
+    }
+    
     // MARK: - Shared Instance
     
     class func sharedInstance() -> FlickrClient {
@@ -222,5 +229,30 @@ class FlickrClient : NSObject {
             }
         }
         task.resume()
+    }
+    
+    // MARK: - All purpose task method for images
+    
+    func taskForImageWithSize(imagePath: String, completionHandler: (imageData: NSData?, error: NSError?) ->  Void) -> NSURLSessionTask {
+        
+        let baseURL = NSURL(string: imagePath)!
+        let url = baseURL
+        
+//        print("The url is: \(url)")
+        
+        let request = NSURLRequest(URL: url)
+        
+        let task = session.dataTaskWithRequest(request) {data, response, downloadError in
+            
+            if let error = downloadError {
+                completionHandler(imageData: nil, error: error)
+            } else {
+                completionHandler(imageData: data, error: nil)
+            }
+        }
+        
+        task.resume()
+        
+        return task
     }
 }

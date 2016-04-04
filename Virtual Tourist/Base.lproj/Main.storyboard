@@ -108,7 +108,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ueS-xW-Fjf">
-                                <rect key="frame" x="0.0" y="78" width="600" height="478"/>
+                                <rect key="frame" x="0.0" y="73" width="600" height="483"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="E9N-DW-qr3">
                                     <size key="itemSize" width="136" height="125"/>
@@ -116,13 +116,10 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
-                                <label key="backgroundView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="P1g-6n-mNE">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="478"/>
+                                <activityIndicatorView key="backgroundView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="Odv-Xd-j75">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="483"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
+                                </activityIndicatorView>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="0hx-cn-Ozx" customClass="CollectionViewCell" customModule="Virtual_Tourist" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="136" height="125"/>
@@ -183,7 +180,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ueS-xW-Fjf" firstAttribute="top" secondItem="9Ur-Wl-eo1" secondAttribute="bottom" constant="58" id="0DF-VY-kQk"/>
+                            <constraint firstItem="ueS-xW-Fjf" firstAttribute="top" secondItem="9Ur-Wl-eo1" secondAttribute="bottom" constant="53" id="0DF-VY-kQk"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ueS-xW-Fjf" secondAttribute="trailing" constant="-20" id="2YQ-e2-072"/>
                             <constraint firstItem="xB6-NF-TXH" firstAttribute="top" secondItem="ueS-xW-Fjf" secondAttribute="bottom" constant="6" id="3cU-g5-bth"/>
                             <constraint firstItem="p5u-1Y-afl" firstAttribute="top" secondItem="9Ur-Wl-eo1" secondAttribute="bottom" constant="-20" id="NKc-2y-kaa"/>
@@ -193,7 +190,7 @@
                             <constraint firstItem="hXC-mv-XI0" firstAttribute="top" secondItem="9BW-Np-lWT" secondAttribute="bottom" constant="8" id="fxd-Rc-sGj"/>
                             <constraint firstItem="hXC-mv-XI0" firstAttribute="top" secondItem="ueS-xW-Fjf" secondAttribute="bottom" constant="44" id="iby-Lv-Gf1"/>
                             <constraint firstAttribute="trailingMargin" secondItem="p5u-1Y-afl" secondAttribute="trailing" constant="-20" id="k3i-kS-a1s"/>
-                            <constraint firstItem="ueS-xW-Fjf" firstAttribute="top" secondItem="p5u-1Y-afl" secondAttribute="bottom" constant="-57" id="kkw-2s-huB"/>
+                            <constraint firstItem="ueS-xW-Fjf" firstAttribute="top" secondItem="p5u-1Y-afl" secondAttribute="bottom" constant="-62" id="kkw-2s-huB"/>
                             <constraint firstItem="xB6-NF-TXH" firstAttribute="centerX" secondItem="Ce0-Zd-Y4V" secondAttribute="centerX" id="pH7-sV-bMC"/>
                             <constraint firstItem="ueS-xW-Fjf" firstAttribute="leading" secondItem="Ce0-Zd-Y4V" secondAttribute="leadingMargin" constant="-20" id="r0b-Z2-cUg"/>
                             <constraint firstItem="hXC-mv-XI0" firstAttribute="top" secondItem="xB6-NF-TXH" secondAttribute="bottom" constant="8" id="wW6-Yh-gg3"/>
@@ -203,9 +200,9 @@
                         <outlet property="collectionButton" destination="xB6-NF-TXH" id="PN4-bm-V5W"/>
                         <outlet property="collectionView" destination="ueS-xW-Fjf" id="h1A-kg-Q0F"/>
                         <outlet property="flowLayout" destination="E9N-DW-qr3" id="ogl-dw-PR1"/>
-                        <outlet property="label" destination="P1g-6n-mNE" id="vpK-bK-qOJ"/>
                         <outlet property="mapView" destination="p5u-1Y-afl" id="aAi-11-rKi"/>
                         <outlet property="removeButton" destination="9BW-Np-lWT" id="ym5-JT-CC3"/>
+                        <outlet property="spinner" destination="Odv-Xd-j75" id="yzd-2t-WCi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PiD-W2-RQ1" userLabel="First Responder" sceneMemberID="firstResponder"/>

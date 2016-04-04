@@ -10,15 +10,15 @@ import UIKit
 import MapKit
 import CoreData
 
-class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate {
-
+class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate, NSFetchedResultsControllerDelegate {
     
     @IBOutlet var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionButton: UIButton!
     @IBOutlet weak var removeButton: UIButton!
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+//    @IBOutlet weak var label: UILabel!
     
     var annotation: MKAnnotation!
     var region: MKCoordinateRegion!
@@ -40,13 +40,16 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         collectionView.delegate = self
         collectionView.allowsSelection = true
         collectionView.allowsMultipleSelection = true
-        
+        fetchedResultsController.delegate = self
         removeButton.hidden = true
+        spinner.hidesWhenStopped = true
         
-        let space: CGFloat = 3.0
-        let dimension = (view.frame.size.width - (2 * space)) / 3.0
+        let space: CGFloat = 1.0
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 3, bottom: 0, right: 3)
+        let dimension = floor(self.view.frame.size.width / 3)
+        flowLayout.itemSize = CGSize(width: dimension, height: dimension)
         flowLayout.minimumInteritemSpacing = space
-        flowLayout.itemSize = CGSizeMake(dimension, dimension)
+        flowLayout.minimumLineSpacing = space
         
         // load saved pins
         do {
@@ -58,8 +61,8 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        label.hidden = true
-        
+        spinner.startAnimating()
+//        label.hidden = true
         collectionButton.enabled = false;
         
         mapView.addAnnotation(annotation)
@@ -74,14 +77,15 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     }
     
     func downloadPhotos() {
+        self.spinner.startAnimating()
         
         FlickrClient.sharedInstance().getImageFromFlickrBySearch(bbox) { (success, results, error) in
             
             if let error = error {
                 print(error)
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.label.hidden = false
-                    self.label.text = error
+//                    self.label.hidden = false
+//                    self.label.text = error
                 }
             } else {
                 if let photoDictionaries = results as? [[String : AnyObject]] {
@@ -89,19 +93,18 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                     
                     dispatch_async(dispatch_get_main_queue()) {
                         
-                        // Parse the array of movies dictionaries
+                        // Parse the array of photo dictionaries
                         _ = photoDictionaries.map() { (dictionary: [String : AnyObject]) -> Photo in
                             let photo = Photo(dictionary: dictionary, context: self.sharedContext)
                             photo.pin = self.pin
                             CoreDataStackManager.sharedInstance().saveContext()
-                            self.collectionView?.reloadData()
                             return photo
                         }
                     }
                 }
             }
         }
-        self.collectionButton.enabled = true
+            self.collectionButton.enabled = true
     }
     
     // MARK: Core Data
@@ -146,7 +149,7 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     
     func configureCell(cell: CollectionViewCell, atIndexPath indexPath: NSIndexPath) {
         
-        var photoImage = UIImage()
+        var photoImage = UIImage(named: "placeholder")
         
         // Load photo
         let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
@@ -161,9 +164,13 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
             print("Image retrieved from cache")
         } else {
             
-            let task = FlickrClient.sharedInstance().taskForImageWithSize(photo.imagePath!) { imageData, error in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.spinner.hidden = false
+            }
+            
+            _ = FlickrClient.sharedInstance().taskForImageWithSize(photo.imagePath!) { imageData, error in
                 
-                if let error = error {
+                if let _ = error {
                     photoImage = UIImage(named: "placeholder")!
                     print("Image download error")
                     dispatch_async(dispatch_get_main_queue()) {
@@ -188,6 +195,10 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         }
         
         cell.imageView!.image = photoImage
+        
+            dispatch_async(dispatch_get_main_queue()) {
+                self.spinner.stopAnimating()
+        }
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -198,9 +209,15 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     
     @IBAction func newCollection(sender: AnyObject) {
         print("adding new collection...")
-        pin.photos.removeAll()
-        collectionView.reloadData()
-        //        donwloadPhotos()
+
+        let photosToDelete = fetchedResultsController.fetchedObjects as! [Photo]
+        
+        for photo in photosToDelete {
+            sharedContext.deleteObject(photo)
+            print("deleting photos")
+        }
+        
+        downloadPhotos()
         CoreDataStackManager.sharedInstance().saveContext()
     }
 
@@ -208,6 +225,24 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    // MARK: Fetched Results Controller
+//    
+//    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+//        
+//    }
+//    
+//    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+//        
+//    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+//        for indexPath in self.insertedIndexPaths {
+//            self.collectionView.insertItemsAtIndexPaths([indexPath])
+//        }
+        self.collectionView.reloadData()
+    }
+
     
     // MARK: Helpers
     

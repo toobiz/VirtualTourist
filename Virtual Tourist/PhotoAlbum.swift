@@ -18,8 +18,8 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     @IBOutlet weak var removeButton: UIButton!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
-//    @IBOutlet weak var label: UILabel!
     
+    var selectedItems = [NSIndexPath]()
     var annotation: MKAnnotation!
     var region: MKCoordinateRegion!
     var bbox : String = ""
@@ -119,6 +119,9 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         let cell = collectionView.cellForItemAtIndexPath(indexPath)
         
         collectionView.selectItemAtIndexPath(indexPath, animated: false, scrollPosition: UICollectionViewScrollPosition.None)
+        selectedItems.append(indexPath)
+        
+        print(selectedItems)
 
         cell?.alpha = 0.5
         collectionButton.hidden = true
@@ -202,44 +205,51 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        print ("number of images: \(images.count)")
         return pin.photos.count
-            //images.count
     }
+    
+    // MARK: Function buttons
     
     @IBAction func newCollection(sender: AnyObject) {
         print("adding new collection...")
 
-        let photosToDelete = fetchedResultsController.fetchedObjects as! [Photo]
+        let oldPhotos = fetchedResultsController.fetchedObjects as! [Photo]
         
-        for photo in photosToDelete {
+        for photo in oldPhotos {
             sharedContext.deleteObject(photo)
-            print("deleting photos")
+            print("deleting all photos")
         }
-        
         downloadPhotos()
         CoreDataStackManager.sharedInstance().saveContext()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    @IBAction func removeItems(sender: AnyObject) {
+        var photosToDelete = [Photo]()
+        
+        for indexPath in selectedItems {
+            photosToDelete.append(fetchedResultsController.objectAtIndexPath(indexPath) as! Photo)
+        }
+        
+        for photo in photosToDelete {
+            sharedContext.deleteObject(photo)
+            print("deleting selected photos")
+        }
+        removeButton.hidden = true
+        collectionButton.hidden = false
+        selectedItems.removeAll()
+        CoreDataStackManager.sharedInstance().saveContext()
+        
+        /* TODO:
+        
+        - "Remove Selected Items" button shouldn't disappear until all items are deselected
+        - items should be removed from selected indexes when deselected
+        
+        */
     }
     
-    // MARK: Fetched Results Controller
-//    
-//    func controllerWillChangeContent(controller: NSFetchedResultsController) {
-//        
-//    }
-//    
-//    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-//        
-//    }
+    // MARK: NSFetchedResultsController
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-//        for indexPath in self.insertedIndexPaths {
-//            self.collectionView.insertItemsAtIndexPaths([indexPath])
-//        }
         self.collectionView.reloadData()
     }
 

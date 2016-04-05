@@ -41,7 +41,6 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         collectionView.allowsSelection = true
         collectionView.allowsMultipleSelection = true
         fetchedResultsController.delegate = self
-        removeButton.hidden = true
         spinner.hidesWhenStopped = true
         
         let space: CGFloat = 1.0
@@ -62,12 +61,10 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         super.viewWillAppear(animated)
         
         spinner.startAnimating()
-//        label.hidden = true
-        collectionButton.enabled = false;
-        
         mapView.addAnnotation(annotation)
         mapView.setRegion(region, animated: true)
         self.mapView.centerCoordinate = annotation.coordinate
+        removeButton.hidden = true
         
         if pin.photos.isEmpty {
         downloadPhotos()
@@ -104,7 +101,7 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 }
             }
         }
-            self.collectionButton.enabled = true
+        self.collectionButton.enabled = true
     }
     
     // MARK: Core Data
@@ -116,36 +113,35 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     // MARK: CollectionView
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    
         let cell = collectionView.cellForItemAtIndexPath(indexPath)
-        
         collectionView.selectItemAtIndexPath(indexPath, animated: false, scrollPosition: UICollectionViewScrollPosition.None)
-        selectedItems.append(indexPath)
-        
-        print(selectedItems)
-
         cell?.alpha = 0.5
-        collectionButton.hidden = true
-        removeButton.hidden = false
+
+            selectedItems.append(indexPath)
+            print(selectedItems.count)
+        
+        buttons()
     }
     
     func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        
         let cell = collectionView.cellForItemAtIndexPath(indexPath)
         collectionView.deselectItemAtIndexPath(indexPath, animated: false)
         cell?.alpha = 1.0
-        collectionButton.hidden = false
-        removeButton.hidden = true
+
+        if let index = selectedItems.indexOf(indexPath) {
+            selectedItems.removeAtIndex(index)
+        }
+        print(selectedItems.count)
+        
+        buttons()
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! CollectionViewCell
         configureCell(cell, atIndexPath: indexPath)
-     
-        if (cell.selected) {
-            cell.alpha = 0.5
-        } else {
-            cell.alpha = 1.0
-        }
         
         return cell
     }
@@ -196,7 +192,6 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
             }
             
         }
-        
         cell.imageView!.image = photoImage
         
             dispatch_async(dispatch_get_main_queue()) {
@@ -234,15 +229,14 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
             sharedContext.deleteObject(photo)
             print("deleting selected photos")
         }
-        removeButton.hidden = true
-        collectionButton.hidden = false
+        
         selectedItems.removeAll()
+        buttons()
         CoreDataStackManager.sharedInstance().saveContext()
         
         /* TODO:
         
-        - "Remove Selected Items" button shouldn't disappear until all items are deselected
-        - items should be removed from selected indexes when deselected
+        - alert view when no photos were found
         
         */
     }
@@ -271,5 +265,14 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         return fetchedResultsController
         
     }()
-
+    
+    func buttons() {
+        if selectedItems.count > 0 {
+            removeButton.hidden = false
+            collectionButton.hidden = true
+        } else {
+            removeButton.hidden = true
+            collectionButton.hidden = false
+        }
+    }
 }

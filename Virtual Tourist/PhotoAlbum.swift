@@ -114,7 +114,7 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
     
         let cell = collectionView.cellForItemAtIndexPath(indexPath)
-        collectionView.selectItemAtIndexPath(indexPath, animated: false, scrollPosition: UICollectionViewScrollPosition.None)
+        collectionView.selectItemAtIndexPath(indexPath, animated: true, scrollPosition: UICollectionViewScrollPosition.None)
         cell?.alpha = 0.5
 
             selectedItems.append(indexPath)
@@ -126,14 +126,14 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
         
         let cell = collectionView.cellForItemAtIndexPath(indexPath)
-        collectionView.deselectItemAtIndexPath(indexPath, animated: false)
+        collectionView.deselectItemAtIndexPath(indexPath, animated: true)
         cell?.alpha = 1.0
 
         if let index = selectedItems.indexOf(indexPath) {
             selectedItems.removeAtIndex(index)
         }
-        print(selectedItems.count)
         
+        print(selectedItems.count)
         buttons()
     }
     
@@ -141,6 +141,12 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! CollectionViewCell
         configureCell(cell, atIndexPath: indexPath)
+        
+        if cell.selected {
+            cell.alpha = 0.5
+        } else {
+            cell.alpha = 1.0
+        }
         
         return cell
     }
@@ -173,10 +179,8 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                     print("Image download error")
                     dispatch_async(dispatch_get_main_queue()) {
                         cell.imageView.image = photoImage
-                        
                     }
                 }
-                
                 if let data = imageData {
                     print("Image download successful")
                     photoImage = UIImage(data: data)!
@@ -233,11 +237,6 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         buttons()
         CoreDataStackManager.sharedInstance().saveContext()
         
-        /* TODO:
-        
-        - alert view when no photos were found
-        
-        */
     }
     
     // MARK: NSFetchedResultsController
@@ -245,14 +244,12 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         self.collectionView.reloadData()
     }
-
     
     // MARK: Helpers
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
         
         let fetchRequest = NSFetchRequest(entityName: "Photo")
-        
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
         fetchRequest.predicate = NSPredicate(format: "pin == %@", self.pin);
         

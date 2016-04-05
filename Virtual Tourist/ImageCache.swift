@@ -26,10 +26,8 @@ class ImageCache {
             
             return
         }
-        // Otherwise, keep the image in memory
         inMemoryCache.setObject(image!, forKey: path)
         
-        // And in documents directory
         let data = UIImagePNGRepresentation(image!)!
         data.writeToFile(path, atomically: true)
     }

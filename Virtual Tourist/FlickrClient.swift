@@ -38,7 +38,6 @@ class FlickrClient : NSObject {
             urlVars += [key + "=" + "\(escapedValue!)"]
             
         }
-        
         return (!urlVars.isEmpty ? "?" : "") + urlVars.joinWithSeparator("&")
     }
     

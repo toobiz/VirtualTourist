@@ -26,7 +26,6 @@ class ViewController: UIViewController, MKMapViewDelegate {
     let locationManager = CLLocationManager()
     var editMode = Bool()
     var pins = [Pin]()
-//    var pin: Pin!
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var toolbar: UIToolbar!
@@ -44,7 +43,6 @@ class ViewController: UIViewController, MKMapViewDelegate {
         mapView.addAnnotations(fetchAllPins())
         pins = fetchAllPins()
         initGestureRecognizer()
-        
     }
     
     // MARK: Core Data
@@ -75,7 +73,6 @@ class ViewController: UIViewController, MKMapViewDelegate {
         print("bbox is: \(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)")
         return "\(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)"
     }
-
     
     func initMap() {
         
@@ -133,13 +130,11 @@ class ViewController: UIViewController, MKMapViewDelegate {
         var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-//            pinView!.canShowCallout = false
         }
         else {
             pinView!.annotation = annotation
         }
         pinView?.animatesDrop = true
-//        pinView?.draggable = true
         return pinView
     }
     
@@ -158,9 +153,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         navigationController!.pushViewController(photoAlbum, animated: true)
 
             let pin = view.annotation as! Pin
-            
             photoAlbum.pin = pin
-            
             photoAlbum.bbox = createBoundingBoxString()
             photoAlbum.setMapViewAnnotation(view.annotation!)
             photoAlbum.setRegionForView(setRegion())

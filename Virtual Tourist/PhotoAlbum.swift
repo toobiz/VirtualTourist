@@ -81,8 +81,7 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
             if let error = error {
                 print(error)
                 dispatch_async(dispatch_get_main_queue()) {
-//                    self.label.hidden = false
-//                    self.label.text = error
+                    self.showAlert()
                 }
             } else {
                 if let photoDictionaries = results as? [[String : AnyObject]] {
@@ -274,5 +273,18 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
             removeButton.hidden = true
             collectionButton.hidden = false
         }
+    }
+    
+    func showAlert() {
+        dispatch_async(dispatch_get_main_queue(), {
+            let message = "This pin has no images"
+            let alert = UIAlertController(title: "", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Try Again", style: .Default, handler: { (alertAction) -> Void in
+                self.downloadPhotos()
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+            self.spinner.stopAnimating()
+        })
     }
 }

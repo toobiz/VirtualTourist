@@ -66,9 +66,7 @@ class Photo : NSManagedObject {
                 do {
                     try NSFileManager.defaultManager().removeItemAtURL(fileURL)
                     print("Photo deleted successfully")
-                } catch {
-                    print("Error when deleting photo")
-                }
+                } catch {}
             }
         }
     }

@@ -43,10 +43,31 @@ class PhotoAlbum: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         fetchedResultsController.delegate = self
         spinner.hidesWhenStopped = true
         
+        let screenHeight: CGFloat = UIScreen.mainScreen().bounds.size.height
+        print(screenHeight)
+        
         let space: CGFloat = 1.0
-        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 3, bottom: 0, right: 3)
-        let dimension = floor(self.view.frame.size.width / 3)
-        flowLayout.itemSize = CGSize(width: dimension, height: dimension)
+        let margin: CGFloat = 3.0
+        
+        if screenHeight >= 667 {
+            print("iPad & iPhone 6 Plus")
+            flowLayout.sectionInset = UIEdgeInsets(top: 0, left: margin, bottom: 0, right: margin)
+            let dimension = floor((self.view.frame.size.width - (2 * margin + 2 * space)) / 3)
+            flowLayout.itemSize = CGSize(width: dimension, height: dimension)
+        }
+
+        if screenHeight >= 667 && screenHeight < 736 {
+            print("iPhone 6")
+            flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 3, bottom: 0, right: 3)
+            let dimension = floor(self.view.frame.size.width  ) / 3
+            flowLayout.itemSize = CGSize(width: dimension, height: dimension)
+        }
+        if screenHeight < 667 {
+            print("older iPhone")
+            flowLayout.sectionInset = UIEdgeInsets(top: 0, left: margin + space, bottom: 0, right: margin + space)
+            let dimension = floor(self.view.frame.size.width / 3)
+                flowLayout.itemSize = CGSize(width: dimension, height: dimension)
+        }
         flowLayout.minimumInteritemSpacing = space
         flowLayout.minimumLineSpacing = space
         
